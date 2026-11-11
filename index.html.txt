@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GX Store - متجر شحن الألعاب الإلكترونية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #0a051b;
+            --bg-secondary: #130c2e;
+            --bg-card: #1c1340;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --accent-pink: #ec4899;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: rgba(139, 92, 246, 0.2);
+            --glow: 0 0 20px rgba(139, 92, 246, 0.4);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        header {
+            background: rgba(19, 12, 46, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .currency-toggle {
+            display: flex;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 3px;
+        }
+
+        .curr-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 5px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .curr-btn.active {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+            color: #fff;
+        }
+
+        .cart-icon-btn {
+            position: relative;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        .cart-icon-btn:hover {
+            box-shadow: var(--glow);
+            border-color: var(--accent-cyan);
+        }
+
+        .cart-count {
+            background: var(--accent-pink);
+            color: white;
+            font-size: 0.75rem;
+            padding: 2px 7px;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+
+        /* Hero Banner */
+        .hero {
+            padding: 3rem 5%;
+            text-align: center;
+            background: radial-gradient(circle at center, rgba(139, 92, 246, 0.15) 0%, rgba(10, 5, 27, 0) 70%);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.8rem;
+        }
+
+        .hero span {
+            color: var(--accent-cyan);
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+        }
+
+        /* Search & Filter */
+        .controls-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 0 5% 2rem;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: white;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        /* Games Grid */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+            padding: 0 5% 4rem;
+        }
+
+        .game-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: 0.3s;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-purple);
+            box-shadow: var(--glow);
+        }
+
+        .game-img-wrapper {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+        }
+
+        .game-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.4s;
+        }
+
+        .game-card:hover .game-img {
+            transform: scale(1.08);
+        }
+
+        .game-info {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
+
+        .game-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .charge-btn {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .charge-btn:hover {
+            opacity: 0.9;
+            transform: scale(0.98);
+        }
+
+        /* Modals */
+        .modal-overlay {
+            position: fixed;
+            top: 0; right: 0; bottom: 0; left: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .modal-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            padding: 25px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--text-muted);
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: white;
+            outline: none;
+        }
+
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .pkg-item {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .pkg-item:hover, .pkg-item.selected {
+            border-color: var(--accent-cyan);
+            background: rgba(6, 182, 212, 0.1);
+        }
+
+        .pkg-title {
+            font-size: 0.95rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .pkg-price {
+            color: var(--accent-cyan);
+            font-weight: bold;
+        }
+
+        /* Cart Drawer */
+        .cart-drawer {
+            position: fixed;
+            top: 0; left: -400px;
+            width: 100%;
+            max-width: 380px;
+            height: 100%;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            z-index: 999;
+            transition: 0.4s ease;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-drawer.open {
+            left: 0;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 15px;
+        }
+
+        .cart-items {
+            flex-grow: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .cart-item {
+            background: var(--bg-card);
+            padding: 12px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .wallet-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .wallet-btn {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 10px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .wallet-btn:hover, .wallet-btn.active {
+            border-color: var(--accent-purple);
+            background: rgba(139, 92, 246, 0.15);
+        }
+
+        .qr-placeholder {
+            width: 140px;
+            height: 140px;
+            background: white;
+            margin: 15px auto;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header / Navbar -->
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-gamepad"></i> GX Store
+        </div>
+        
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <div class="currency-toggle">
+                <button class="curr-btn active" id="btn-usd" onclick="setCurrency('USD')">USD ($)</button>
+                <button class="curr-btn" id="btn-lyd" onclick="setCurrency('LYD')">LYD (د.ل)</button>
+            </div>
+            
+            <button class="cart-icon-btn" onclick="toggleCart()">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="cart-count" id="cart-count">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>شحن ألعابك المفضلـة <span>بأفضل الأسعار</span></h1>
+        <p>خدمة شحن فورية وآمنة بالكامل عبر المحافظ الإلكترونية المحـلية والعالمية.</p>
+    </section>
+
+    <!-- Control Bar -->
+    <div class="controls-container">
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="search-input" placeholder="ابحث عن لعبة..." oninput="filterGames()">
+        </div>
+    </div>
+
+    <!-- Games Grid -->
+    <main class="games-grid" id="games-container"></main>
+
+    <!-- Package Selection Modal -->
+    <div class="modal-overlay" id="package-modal">
+        <div class="modal-card">
+            <button class="close-modal" onclick="closeModal('package-modal')">&times;</button>
+            <h2 id="modal-game-title" style="margin-bottom: 15px;">اختر الباقة</h2>
+            
+            <div class="input-group">
+                <label for="player-id">رقم اللاعب (Player ID) <span style="color:red">*</span></label>
+                <input type="text" id="player-id" placeholder="مثال: 5123456789">
+            </div>
+
+            <label style="display:block; margin-bottom:8px; color:var(--text-muted); font-weight:bold;">الباقات المتاحة:</label>
+            <div class="packages-grid" id="packages-container"></div>
+
+            <button class="charge-btn" onclick="addToCart()">إضافة إلى السلة</button>
+        </div>
+    </div>
+
+    <!-- Wallet Payment Modal -->
+    <div class="modal-overlay" id="payment-modal">
+        <div class="modal-card" style="text-align: center;">
+            <button class="close-modal" onclick="closeModal('payment-modal')">&times;</button>
+            <h2>إتمام الدفع عبر المحفظة</h2>
+            <p style="color: var(--text-muted); margin-top: 5px;" id="pay-wallet-name">Binance Pay</p>
+
+            <div class="qr-placeholder" id="qr-box">
+                <i class="fa-solid fa-qrcode fa-4x"></i>
+            </div>
+
+            <div style="background: var(--bg-primary); padding: 10px; border-radius: 8px; font-family: monospace; font-size: 0.9rem; margin-bottom: 15px; word-break: break-all;" id="wallet-address">
+                0x71C7656EC7ab88b098defB751B7401B5f6d8976F
+            </div>
+
+            <div class="input-group" style="text-align: right;">
+                <label for="txid-input">رقم إثبات العملية (TXID / Reference ID)</label>
+                <input type="text" id="txid-input" placeholder="أدخل رقم العملية بعد التحويل">
+            </div>
+
+            <button class="charge-btn" onclick="confirmPayment()">تأكيد عملية الدفع</button>
+        </div>
+    </div>
+
+    <!-- Cart Drawer -->
+    <div class="cart-drawer" id="cart-drawer">
+        <div class="cart-header">
+            <h3>سلة المشتريات</h3>
+            <button class="close-modal" style="position:static" onclick="toggleCart()">&times;</button>
+        </div>
+
+        <div class="cart-items" id="cart-items-container"></div>
+
+        <div style="border-top: 1px solid var(--border-color); padding-top: 15px; margin-top: 15px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-weight: bold;">
+                <span>المجموع:</span>
+                <span id="cart-total-price" style="color: var(--accent-cyan)">0.00</span>
+            </div>
+
+            <h4>اختر المحفظة للدفع:</h4>
+            <div class="wallet-options">
+                <div class="wallet-btn active" onclick="selectWallet('Binance Pay', '0x71C7656EC7ab88b098defB751B7401B5f6d8976F', this)">
+                    <i class="fa-solid fa-wallet"></i> Binance Pay / USDT
+                </div>
+                <div class="wallet-btn" onclick="selectWallet('KazePay', 'KZ-99201128', this)">
+                    <i class="fa-solid fa-credit-card"></i> KazePay Wallet
+                </div>
+                <div class="wallet-btn" onclick="selectWallet('Local Wallet', '0910000000', this)">
+                    <i class="fa-solid fa-mobile-screen"></i> محفظة محليـة (سداد / تداول)
+                </div>
+            </div>
+
+            <button class="charge-btn" style="margin-top: 15px;" onclick="openPaymentModal()">متابعة الدفع</button>
+        </div>
+    </div>
+
+    <script>
+        const gamesData = [
+            {
+                id: 'pubg',
+                name: 'PUBG Mobile',
+                image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=500&q=80',
+                packages: [
+                    { id: 'p1', name: '60 UC', priceUSD: 0.99, priceLYD: 5.00 },
+                    { id: 'p2', name: '325 UC', priceUSD: 4.99, priceLYD: 25.00 },
+                    { id: 'p3', name: '660 UC', priceUSD: 9.99, priceLYD: 50.00 },
+                    { id: 'p4', name: '1800 UC', priceUSD: 24.99, priceLYD: 125.00 }
+                ]
+            },
+            {
+                id: 'freefire',
+                name: 'Free Fire',
+                image: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=500&q=80',
+                packages: [
+                    { id: 'f1', name: '100 جوهرة', priceUSD: 0.99, priceLYD: 5.00 },
+                    { id: 'f2', name: '310 جوهرة', priceUSD: 2.99, priceLYD: 15.00 },
+                    { id: 'f3', name: '520 جوهرة', priceUSD: 4.99, priceLYD: 25.00 },
+                    { id: 'f4', name: '1060 جوهرة', priceUSD: 9.99, priceLYD: 50.00 }
+                ]
+            },
+            {
+                id: 'eafc',
+                name: 'EA SPORTS FC 26',
+                image: 'https://images.unsplash.com/photo-1614680376593-902f749f7edc?auto=format&fit=crop&w=500&q=80',
+                packages: [
+                    { id: 'e1', name: '500 FC Points', priceUSD: 4.99, priceLYD: 25.00 },
+                    { id: 'e2', name: '1050 FC Points', priceUSD: 9.99, priceLYD: 50.00 },
+                    { id: 'e3', name: '2800 FC Points', priceUSD: 24.99, priceLYD: 125.00 }
+                ]
+            },
+            {
+                id: 'roblox',
+                name: 'Roblox',
+                image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=500&q=80',
+                packages: [
+                    { id: 'r1', name: '400 Robux', priceUSD: 4.99, priceLYD: 25.00 },
+                    { id: 'r2', name: '800 Robux', priceUSD: 9.99, priceLYD: 50.00 },
+                    { id: 'r3', name: '1700 Robux', priceUSD: 19.99, priceLYD: 100.00 }
+                ]
+            }
+        ];
+
+        let currentCurrency = 'USD';
+        let selectedGame = null;
+        let selectedPackage = null;
+        let cart = [];
+        let selectedWalletInfo = {
+            name: 'Binance Pay',
+            address: '0x71C7656EC7ab88b098defB751B7401B5f6d8976F'
+        };
+
+        function renderGames(data) {
+            const container = document.getElementById('games-container');
+            container.innerHTML = '';
+            
+            data.forEach(game => {
+                const card = document.createElement('div');
+                card.className = 'game-card';
+                card.innerHTML = `
+                    <div class="game-img-wrapper">
+                        <img src="${game.image}" class="game-img" alt="${game.name}">
+                    </div>
+                    <div class="game-info">
+                        <div class="game-title">${game.name}</div>
+                        <button class="charge-btn" onclick="openPackageModal('${game.id}')">شحن الآن</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function setCurrency(curr) {
+            currentCurrency = curr;
+            document.getElementById('btn-usd').classList.toggle('active', curr === 'USD');
+            document.getElementById('btn-lyd').classList.toggle('active', curr === 'LYD');
+            updateCartUI();
+        }
+
+        function filterGames() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filtered = gamesData.filter(g => g.name.toLowerCase().includes(query));
+            renderGames(filtered);
+        }
+
+        function openPackageModal(gameId) {
+            selectedGame = gamesData.find(g => g.id === gameId);
+            selectedPackage = null;
+            
+            document.getElementById('modal-game-title').innerText = selectedGame.name;
+            const container = document.getElementById('packages-container');
+            container.innerHTML = '';
+
+            selectedGame.packages.forEach(pkg => {
+                const price = currentCurrency === 'USD' ? `$${pkg.priceUSD}` : `${pkg.priceLYD} د.ل`;
+                const item = document.createElement('div');
+                item.className = 'pkg-item';
+                item.innerHTML = `
+                    <div class="pkg-title">${pkg.name}</div>
+                    <div class="pkg-price">${price}</div>
+                `;
+                item.onclick = () => {
+                    document.querySelectorAll('.pkg-item').forEach(el => el.classList.remove('selected'));
+                    item.classList.add('selected');
+                    selectedPackage = pkg;
+                };
+                container.appendChild(item);
+            });
+
+            document.getElementById('package-modal').style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function addToCart() {
+            const playerId = document.getElementById('player-id').value;
+            if (!playerId) {
+                alert('يرجى إدخال رقم اللاعب (Player ID)');
+                return;
+            }
+            if (!selectedPackage) {
+                alert('يرجى اختيار باقة لشحنها');
+                return;
+            }
+
+            cart.push({
+                gameName: selectedGame.name,
+                package: selectedPackage,
+                playerId: playerId
+            });
+
+            closeModal('package-modal');
+            updateCartUI();
+            toggleCart(true);
+        }
+
+        function toggleCart(forceOpen = false) {
+            const drawer = document.getElementById('cart-drawer');
+            if (forceOpen) {
+                drawer.classList.add('open');
+            } else {
+                drawer.classList.toggle('open');
+            }
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-count').innerText = cart.length;
+            const container = document.getElementById('cart-items-container');
+            container.innerHTML = '';
+
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                const price = currentCurrency === 'USD' ? item.package.priceUSD : item.package.priceLYD;
+                total += price;
+
+                const el = document.createElement('div');
+                el.className = 'cart-item';
+                el.innerHTML = `
+                    <div>
+                        <div style="font-weight:bold;">${item.gameName}</div>
+                        <div style="font-size:0.85rem; color:var(--text-muted);">${item.package.name} (ID: ${item.playerId})</div>
+                        <div style="color:var(--accent-cyan); font-weight:bold;">${currentCurrency === 'USD' ? '$'+price : price+' د.ل'}</div>
+                    </div>
+                    <button onclick="removeFromCart(${index})" style="background:none; border:none; color:var(--accent-pink); cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
+                `;
+                container.appendChild(el);
+            });
+
+            document.getElementById('cart-total-price').innerText = currentCurrency === 'USD' ? `$${total.toFixed(2)}` : `${total.toFixed(2)} د.ل`;
+        }
+
+        function selectWallet(name, address, element) {
+            document.querySelectorAll('.wallet-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            selectedWalletInfo = { name, address };
+        }
+
+        function openPaymentModal() {
+            if (cart.length === 0) {
+                alert('السلة فارغة!');
+                return;
+            }
+            document.getElementById('pay-wallet-name').innerText = selectedWalletInfo.name;
+            document.getElementById('wallet-address').innerText = selectedWalletInfo.address;
+            document.getElementById('payment-modal').style.display = 'flex';
+        }
+
+        function confirmPayment() {
+            const txid = document.getElementById('txid-input').value;
+            if (!txid) {
+                alert('يرجى إدخال رقم العملية / إثبات التحويل');
+                return;
+            }
+
+            alert('تم استلام طلب الشحن بنجاح! سيتم التحقق من التحويل وإرسال الشدات/الجواهر فوراً.');
+            cart = [];
+            updateCartUI();
+            closeModal('payment-modal');
+            toggleCart();
+        }
+
+        renderGames(gamesData);
+    </script>
+</body>
+</html>
